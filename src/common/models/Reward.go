@@ -6,11 +6,10 @@ import (
 
 type Reward struct {
 	gorm.Model
-	Amount       float64
-	UserID       uint
-	User         User
-	MerchantID   uint
-	Merchant     Merchant
-	RewardType   RewardType
-	RewardTypeID uint
+	UserID     uint
+	User       User
+	MerchantID uint
+	Merchant   Merchant
+	Type       string
+	Amount     float64
 }
