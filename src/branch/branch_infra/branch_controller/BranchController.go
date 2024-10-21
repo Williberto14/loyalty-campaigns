@@ -45,6 +45,17 @@ func (c *BranchController) setupBranchRoutes(router *gin.Engine) {
 	}
 }
 
+// CreateBranch godoc
+//	@Summary		Create a new branch
+//	@Description	Create a new branch for a merchant in the system
+//	@Tags			branches
+//	@Accept			json
+//	@Produce		json
+//	@Param			request	body		branch_requests.CreateBranchRequest	true	"Branch creation request"
+//	@Success		201		{object}	branch_responses.BranchResponse
+//	@Failure		400		{object}	map[string]string
+//	@Failure		500		{object}	map[string]string
+//	@Router			/api/branches [post]
 func (c *BranchController) CreateBranch(ctx *gin.Context) {
 	var req branch_requests.CreateBranchRequest
 	if err := ctx.ShouldBindJSON(&req); err != nil {
@@ -61,6 +72,17 @@ func (c *BranchController) CreateBranch(ctx *gin.Context) {
 	ctx.JSON(http.StatusCreated, response)
 }
 
+// GetBranch godoc
+//	@Summary		Get a branch by ID
+//	@Description	Get details of a specific branch
+//	@Tags			branches
+//	@Accept			json
+//	@Produce		json
+//	@Param			id	path		int	true	"Branch ID"
+//	@Success		200	{object}	branch_responses.BranchResponse
+//	@Failure		400	{object}	map[string]string
+//	@Failure		404	{object}	map[string]string
+//	@Router			/api/branches/{id} [get]
 func (c *BranchController) GetBranch(ctx *gin.Context) {
 	id, err := strconv.ParseUint(ctx.Param("id"), 10, 32)
 	if err != nil {
@@ -77,6 +99,18 @@ func (c *BranchController) GetBranch(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, response)
 }
 
+// UpdateBranch godoc
+//	@Summary		Update a branch
+//	@Description	Update details of an existing branch
+//	@Tags			branches
+//	@Accept			json
+//	@Produce		json
+//	@Param			id		path		int									true	"Branch ID"
+//	@Param			request	body		branch_requests.UpdateBranchRequest	true	"Branch update request"
+//	@Success		200		{object}	branch_responses.BranchResponse
+//	@Failure		400		{object}	map[string]string
+//	@Failure		500		{object}	map[string]string
+//	@Router			/api/branches/{id} [put]
 func (c *BranchController) UpdateBranch(ctx *gin.Context) {
 	id, err := strconv.ParseUint(ctx.Param("id"), 10, 32)
 	if err != nil {
@@ -99,6 +133,17 @@ func (c *BranchController) UpdateBranch(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, response)
 }
 
+// DeleteBranch godoc
+//	@Summary		Delete a branch
+//	@Description	Delete an existing branch from the system
+//	@Tags			branches
+//	@Accept			json
+//	@Produce		json
+//	@Param			id	path		int	true	"Branch ID"
+//	@Success		200	{object}	map[string]string
+//	@Failure		400	{object}	map[string]string
+//	@Failure		500	{object}	map[string]string
+//	@Router			/api/branches/{id} [delete]
 func (c *BranchController) DeleteBranch(ctx *gin.Context) {
 	id, err := strconv.ParseUint(ctx.Param("id"), 10, 32)
 	if err != nil {
@@ -115,6 +160,15 @@ func (c *BranchController) DeleteBranch(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, gin.H{"message": "Branch deleted successfully"})
 }
 
+// ListBranches godoc
+//	@Summary		List all branches
+//	@Description	Get a list of all branches in the system
+//	@Tags			branches
+//	@Accept			json
+//	@Produce		json
+//	@Success		200	{array}		branch_responses.BranchResponse
+//	@Failure		500	{object}	map[string]string
+//	@Router			/api/branches [get]
 func (c *BranchController) ListBranches(ctx *gin.Context) {
 	responses, err := c.branchService.ListBranches()
 	if err != nil {
@@ -125,6 +179,17 @@ func (c *BranchController) ListBranches(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, responses)
 }
 
+// GetBranchesByMerchant godoc
+//	@Summary		Get branches by merchant
+//	@Description	Get a list of branches for a specific merchant
+//	@Tags			branches
+//	@Accept			json
+//	@Produce		json
+//	@Param			merchantID	path		int	true	"Merchant ID"
+//	@Success		200			{array}		branch_responses.BranchResponse
+//	@Failure		400			{object}	map[string]string
+//	@Failure		500			{object}	map[string]string
+//	@Router			/api/branches/merchant/{merchantID} [get]
 func (c *BranchController) GetBranchesByMerchant(ctx *gin.Context) {
 	merchantID, err := strconv.ParseUint(ctx.Param("merchantID"), 10, 32)
 	if err != nil {
@@ -141,6 +206,17 @@ func (c *BranchController) GetBranchesByMerchant(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, responses)
 }
 
+// GetBranchWithCampaigns godoc
+//	@Summary		Get a branch with its campaigns
+//	@Description	Get details of a specific branch along with its associated campaigns
+//	@Tags			branches
+//	@Accept			json
+//	@Produce		json
+//	@Param			id	path		int	true	"Branch ID"
+//	@Success		200	{object}	branch_responses.BranchWithCampaignsResponse
+//	@Failure		400	{object}	map[string]string
+//	@Failure		500	{object}	map[string]string
+//	@Router			/api/branches/{id}/campaigns [get]
 func (c *BranchController) GetBranchWithCampaigns(ctx *gin.Context) {
 	id, err := strconv.ParseUint(ctx.Param("id"), 10, 32)
 	if err != nil {

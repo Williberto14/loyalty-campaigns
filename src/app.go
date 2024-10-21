@@ -12,6 +12,11 @@ import (
 	"loyalty-campaigns/src/transaction/transaction_infra/transaction_controller"
 	"loyalty-campaigns/src/user/user_infra/user_controller"
 
+	_ "loyalty-campaigns/docs"
+
+	swaggerFiles "github.com/swaggo/files"
+	ginSwagger "github.com/swaggo/gin-swagger"
+
 	"github.com/gin-gonic/gin"
 )
 
@@ -38,6 +43,8 @@ func Run() {
 	reward_controller.NewRewardController(router)
 	transaction_controller.NewTransactionController(router)
 	loyalty_controller.NewLoyaltyController(router)
+
+	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
 	router.Run("127.0.0.1:7070")
 

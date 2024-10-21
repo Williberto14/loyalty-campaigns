@@ -43,6 +43,17 @@ func (c *TransactionController) setupTransactionRoutes(router *gin.Engine) {
 	}
 }
 
+// CreateTransaction godoc
+//	@Summary		Create a new transaction
+//	@Description	Create a new transaction in the system
+//	@Tags			transactions
+//	@Accept			json
+//	@Produce		json
+//	@Param			request	body		transaction_requests.CreateTransactionRequest	true	"Transaction creation request"
+//	@Success		201		{object}	transaction_responses.TransactionResponse
+//	@Failure		400		{object}	map[string]string
+//	@Failure		500		{object}	map[string]string
+//	@Router			/api/transactions [post]
 func (c *TransactionController) CreateTransaction(ctx *gin.Context) {
 	var req transaction_requests.CreateTransactionRequest
 	if err := ctx.ShouldBindJSON(&req); err != nil {
@@ -59,6 +70,17 @@ func (c *TransactionController) CreateTransaction(ctx *gin.Context) {
 	ctx.JSON(http.StatusCreated, response)
 }
 
+// GetTransaction godoc
+//	@Summary		Get a transaction by ID
+//	@Description	Get details of a specific transaction
+//	@Tags			transactions
+//	@Accept			json
+//	@Produce		json
+//	@Param			id	path		int	true	"Transaction ID"
+//	@Success		200	{object}	transaction_responses.TransactionResponse
+//	@Failure		400	{object}	map[string]string
+//	@Failure		404	{object}	map[string]string
+//	@Router			/api/transactions/{id} [get]
 func (c *TransactionController) GetTransaction(ctx *gin.Context) {
 	id, err := strconv.ParseUint(ctx.Param("id"), 10, 32)
 	if err != nil {
@@ -75,6 +97,17 @@ func (c *TransactionController) GetTransaction(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, response)
 }
 
+// ListTransactionsByUser godoc
+//	@Summary		List transactions for a specific user
+//	@Description	Get a list of all transactions for a given user
+//	@Tags			transactions
+//	@Accept			json
+//	@Produce		json
+//	@Param			userID	path		int	true	"User ID"
+//	@Success		200		{array}		transaction_responses.TransactionResponse
+//	@Failure		400		{object}	map[string]string
+//	@Failure		500		{object}	map[string]string
+//	@Router			/api/transactions/user/{userID} [get]
 func (c *TransactionController) ListTransactionsByUser(ctx *gin.Context) {
 	userID, err := strconv.ParseUint(ctx.Param("userID"), 10, 32)
 	if err != nil {
@@ -91,6 +124,19 @@ func (c *TransactionController) ListTransactionsByUser(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, responses)
 }
 
+// GetTotalAmountByUserAndDateRange godoc
+//	@Summary		Get total transaction amount for a user within a date range
+//	@Description	Calculate the total transaction amount for a specific user within a given date range
+//	@Tags			transactions
+//	@Accept			json
+//	@Produce		json
+//	@Param			userID		path		int		true	"User ID"
+//	@Param			startDate	query		string	true	"Start date (RFC3339 format)"	Format(date-time)
+//	@Param			endDate		query		string	true	"End date (RFC3339 format)"		Format(date-time)
+//	@Success		200			{object}	map[string]float64
+//	@Failure		400			{object}	map[string]string
+//	@Failure		500			{object}	map[string]string
+//	@Router			/api/transactions/user/{userID}/total [get]
 func (c *TransactionController) GetTotalAmountByUserAndDateRange(ctx *gin.Context) {
 	userID, err := strconv.ParseUint(ctx.Param("userID"), 10, 32)
 	if err != nil {

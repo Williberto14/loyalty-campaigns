@@ -45,6 +45,17 @@ func (c *UserController) setupUserRoutes(router *gin.Engine) {
 	}
 }
 
+// CreateUser godoc
+//	@Summary		Create a new user
+//	@Description	Create a new user in the system
+//	@Tags			users
+//	@Accept			json
+//	@Produce		json
+//	@Param			request	body		user_requests.CreateUserRequest	true	"User creation request"
+//	@Success		201		{object}	user_responses.UserResponse
+//	@Failure		400		{object}	map[string]string
+//	@Failure		500		{object}	map[string]string
+//	@Router			/api/users [post]
 func (c *UserController) CreateUser(ctx *gin.Context) {
 	var req user_requests.CreateUserRequest
 	if err := ctx.ShouldBindJSON(&req); err != nil {
@@ -61,6 +72,17 @@ func (c *UserController) CreateUser(ctx *gin.Context) {
 	ctx.JSON(http.StatusCreated, response)
 }
 
+// GetUser godoc
+//	@Summary		Get a user by ID
+//	@Description	Get details of a specific user
+//	@Tags			users
+//	@Accept			json
+//	@Produce		json
+//	@Param			id	path		int	true	"User ID"
+//	@Success		200	{object}	user_responses.UserResponse
+//	@Failure		400	{object}	map[string]string
+//	@Failure		404	{object}	map[string]string
+//	@Router			/api/users/{id} [get]
 func (c *UserController) GetUser(ctx *gin.Context) {
 	id, err := strconv.ParseUint(ctx.Param("id"), 10, 32)
 	if err != nil {
@@ -77,6 +99,18 @@ func (c *UserController) GetUser(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, response)
 }
 
+// UpdateUser godoc
+//	@Summary		Update a user
+//	@Description	Update details of an existing user
+//	@Tags			users
+//	@Accept			json
+//	@Produce		json
+//	@Param			id		path		int								true	"User ID"
+//	@Param			request	body		user_requests.UpdateUserRequest	true	"User update request"
+//	@Success		200		{object}	user_responses.UserResponse
+//	@Failure		400		{object}	map[string]string
+//	@Failure		500		{object}	map[string]string
+//	@Router			/api/users/{id} [put]
 func (c *UserController) UpdateUser(ctx *gin.Context) {
 	id, err := strconv.ParseUint(ctx.Param("id"), 10, 32)
 	if err != nil {
@@ -99,6 +133,17 @@ func (c *UserController) UpdateUser(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, response)
 }
 
+// DeleteUser godoc
+//	@Summary		Delete a user
+//	@Description	Delete an existing user from the system
+//	@Tags			users
+//	@Accept			json
+//	@Produce		json
+//	@Param			id	path		int	true	"User ID"
+//	@Success		200	{object}	map[string]string
+//	@Failure		400	{object}	map[string]string
+//	@Failure		500	{object}	map[string]string
+//	@Router			/api/users/{id} [delete]
 func (c *UserController) DeleteUser(ctx *gin.Context) {
 	id, err := strconv.ParseUint(ctx.Param("id"), 10, 32)
 	if err != nil {
@@ -115,6 +160,15 @@ func (c *UserController) DeleteUser(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, gin.H{"message": "User deleted successfully"})
 }
 
+// ListUsers godoc
+//	@Summary		List all users
+//	@Description	Get a list of all users in the system
+//	@Tags			users
+//	@Accept			json
+//	@Produce		json
+//	@Success		200	{array}		user_responses.UserResponse
+//	@Failure		500	{object}	map[string]string
+//	@Router			/api/users [get]
 func (c *UserController) ListUsers(ctx *gin.Context) {
 	responses, err := c.userService.ListUsers()
 	if err != nil {
@@ -125,6 +179,17 @@ func (c *UserController) ListUsers(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, responses)
 }
 
+// GetUserWithTransactions godoc
+//	@Summary		Get a user with their transactions
+//	@Description	Get details of a user along with their transaction history
+//	@Tags			users
+//	@Accept			json
+//	@Produce		json
+//	@Param			id	path		int	true	"User ID"
+//	@Success		200	{object}	user_responses.UserWithTransactionsResponse
+//	@Failure		400	{object}	map[string]string
+//	@Failure		500	{object}	map[string]string
+//	@Router			/api/users/{id}/transactions [get]
 func (c *UserController) GetUserWithTransactions(ctx *gin.Context) {
 	id, err := strconv.ParseUint(ctx.Param("id"), 10, 32)
 	if err != nil {
@@ -141,6 +206,17 @@ func (c *UserController) GetUserWithTransactions(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, response)
 }
 
+// GetUserWithRewards godoc
+//	@Summary		Get a user with their rewards
+//	@Description	Get details of a user along with their reward history
+//	@Tags			users
+//	@Accept			json
+//	@Produce		json
+//	@Param			id	path		int	true	"User ID"
+//	@Success		200	{object}	user_responses.UserWithRewardsResponse
+//	@Failure		400	{object}	map[string]string
+//	@Failure		500	{object}	map[string]string
+//	@Router			/api/users/{id}/rewards [get]
 func (c *UserController) GetUserWithRewards(ctx *gin.Context) {
 	id, err := strconv.ParseUint(ctx.Param("id"), 10, 32)
 	if err != nil {

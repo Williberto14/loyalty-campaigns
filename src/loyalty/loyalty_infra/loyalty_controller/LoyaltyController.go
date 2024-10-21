@@ -58,6 +58,17 @@ func (c *LoyaltyController) setupRoutes(router *gin.Engine) {
 	}
 }
 
+// ProcessTransaction godoc
+//	@Summary		Process a transaction and award loyalty points or cashback
+//	@Description	Process a user transaction and award loyalty points or cashback based on active campaigns
+//	@Tags			loyalty
+//	@Accept			json
+//	@Produce		json
+//	@Param			request	body		loyalty_requests.ProcessTransactionRequest	true	"Transaction details"
+//	@Success		200		{object}	map[string]string
+//	@Failure		400		{object}	map[string]string
+//	@Failure		500		{object}	map[string]string
+//	@Router			/api/loyalty/process-transaction [post]
 func (c *LoyaltyController) ProcessTransaction(ctx *gin.Context) {
 	var req loyalty_requests.ProcessTransactionRequest
 	if err := ctx.ShouldBindJSON(&req); err != nil {
@@ -74,6 +85,17 @@ func (c *LoyaltyController) ProcessTransaction(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, gin.H{"message": "Transaction processed successfully"})
 }
 
+// RedeemRewards godoc
+//	@Summary		Redeem user rewards
+//	@Description	Redeem a user's loyalty points or cashback
+//	@Tags			loyalty
+//	@Accept			json
+//	@Produce		json
+//	@Param			request	body		loyalty_requests.RedeemRewardsRequest	true	"Redemption details"
+//	@Success		200		{object}	map[string]string
+//	@Failure		400		{object}	map[string]string
+//	@Failure		500		{object}	map[string]string
+//	@Router			/api/loyalty/redeem-rewards [post]
 func (c *LoyaltyController) RedeemRewards(ctx *gin.Context) {
 	var req loyalty_requests.RedeemRewardsRequest
 	if err := ctx.ShouldBindJSON(&req); err != nil {
