@@ -16,7 +16,7 @@ type ICampaignService interface {
 	UpdateCampaign(id uint, req campaign_requests.UpdateCampaignRequest) (*campaign_responses.CampaignResponse, error)
 	DeleteCampaign(id uint) error
 	ListCampaigns() ([]campaign_responses.CampaignResponse, error)
-	GetActiveCampaigns(merchantID, branchID uint, date time.Time) ([]campaign_responses.CampaignResponse, error)
+	GetActiveCampaigns(merchantID uint, branchID *uint, date time.Time) ([]campaign_responses.CampaignResponse, error)
 }
 
 type campaignService struct {
@@ -56,16 +56,7 @@ func (s *campaignService) CreateCampaign(req campaign_requests.CreateCampaignReq
 		return nil, err
 	}
 
-	return &campaign_responses.CampaignResponse{
-		ID:         campaign.ID,
-		MerchantID: campaign.MerchantID,
-		BranchID:   campaign.BranchID,
-		StartDate:  campaign.StartDate,
-		EndDate:    campaign.EndDate,
-		Type:       campaign.Type,
-		Value:      campaign.Value,
-		MinAmount:  campaign.MinAmount,
-	}, nil
+	return campaignToResponse(campaign), nil
 }
 
 func (s *campaignService) GetCampaign(id uint) (*campaign_responses.CampaignResponse, error) {
@@ -75,16 +66,7 @@ func (s *campaignService) GetCampaign(id uint) (*campaign_responses.CampaignResp
 		return nil, err
 	}
 
-	return &campaign_responses.CampaignResponse{
-		ID:         campaign.ID,
-		MerchantID: campaign.MerchantID,
-		BranchID:   campaign.BranchID,
-		StartDate:  campaign.StartDate,
-		EndDate:    campaign.EndDate,
-		Type:       campaign.Type,
-		Value:      campaign.Value,
-		MinAmount:  campaign.MinAmount,
-	}, nil
+	return campaignToResponse(campaign), nil
 }
 
 func (s *campaignService) UpdateCampaign(id uint, req campaign_requests.UpdateCampaignRequest) (*campaign_responses.CampaignResponse, error) {
@@ -106,16 +88,7 @@ func (s *campaignService) UpdateCampaign(id uint, req campaign_requests.UpdateCa
 		return nil, err
 	}
 
-	return &campaign_responses.CampaignResponse{
-		ID:         campaign.ID,
-		MerchantID: campaign.MerchantID,
-		BranchID:   campaign.BranchID,
-		StartDate:  campaign.StartDate,
-		EndDate:    campaign.EndDate,
-		Type:       campaign.Type,
-		Value:      campaign.Value,
-		MinAmount:  campaign.MinAmount,
-	}, nil
+	return campaignToResponse(campaign), nil
 }
 
 func (s *campaignService) DeleteCampaign(id uint) error {
@@ -133,43 +106,38 @@ func (s *campaignService) ListCampaigns() ([]campaign_responses.CampaignResponse
 		return nil, err
 	}
 
-	var responses []campaign_responses.CampaignResponse
-	for _, campaign := range campaigns {
-		responses = append(responses, campaign_responses.CampaignResponse{
-			ID:         campaign.ID,
-			MerchantID: campaign.MerchantID,
-			BranchID:   campaign.BranchID,
-			StartDate:  campaign.StartDate,
-			EndDate:    campaign.EndDate,
-			Type:       campaign.Type,
-			Value:      campaign.Value,
-			MinAmount:  campaign.MinAmount,
-		})
-	}
-
-	return responses, nil
+	return campaignsToResponses(campaigns), nil
 }
 
-func (s *campaignService) GetActiveCampaigns(merchantID, branchID uint, date time.Time) ([]campaign_responses.CampaignResponse, error) {
+func (s *campaignService) GetActiveCampaigns(merchantID uint, branchID *uint, date time.Time) ([]campaign_responses.CampaignResponse, error) {
 	campaigns, err := s.campaignRepo.GetActiveCampaigns(merchantID, branchID, date)
 	if err != nil {
 		s.logger.Error("Error al obtener campañas activas", err)
 		return nil, err
 	}
 
-	var responses []campaign_responses.CampaignResponse
-	for _, campaign := range campaigns {
-		responses = append(responses, campaign_responses.CampaignResponse{
-			ID:         campaign.ID,
-			MerchantID: campaign.MerchantID,
-			BranchID:   campaign.BranchID,
-			StartDate:  campaign.StartDate,
-			EndDate:    campaign.EndDate,
-			Type:       campaign.Type,
-			Value:      campaign.Value,
-			MinAmount:  campaign.MinAmount,
-		})
-	}
+	return campaignsToResponses(campaigns), nil
+}
 
-	return responses, nil
+// Función auxiliar para convertir una Campaign a CampaignResponse
+func campaignToResponse(campaign *models.Campaign) *campaign_responses.CampaignResponse {
+	return &campaign_responses.CampaignResponse{
+		ID:         campaign.ID,
+		MerchantID: campaign.MerchantID,
+		BranchID:   campaign.BranchID,
+		StartDate:  campaign.StartDate,
+		EndDate:    campaign.EndDate,
+		Type:       campaign.Type,
+		Value:      campaign.Value,
+		MinAmount:  campaign.MinAmount,
+	}
+}
+
+// Función auxiliar para convertir slice de Campaign a slice de CampaignResponse
+func campaignsToResponses(campaigns []models.Campaign) []campaign_responses.CampaignResponse {
+	responses := make([]campaign_responses.CampaignResponse, len(campaigns))
+	for i, campaign := range campaigns {
+		responses[i] = *campaignToResponse(&campaign)
+	}
+	return responses
 }

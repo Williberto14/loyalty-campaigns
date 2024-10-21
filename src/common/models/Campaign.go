@@ -8,13 +8,13 @@ import (
 
 type Campaign struct {
 	gorm.Model
-	MerchantID uint
-	Merchant   Merchant
-	BranchID   uint
-	Branch     Branch
-	StartDate  time.Time
-	EndDate    time.Time
-	Type       string
-	Value      float64
-	MinAmount  float64
+	MerchantID uint      `gorm:"not null"`
+	Merchant   Merchant  `gorm:"foreignKey:MerchantID"`
+	BranchID   *uint     `gorm:"index"`
+	Branch     Branch    `gorm:"foreignKey:BranchID"`
+	StartDate  time.Time `gorm:"not null"`
+	EndDate    *time.Time
+	Type       string  `gorm:"not null"`
+	Value      float64 `gorm:"not null"`
+	MinAmount  *float64
 }

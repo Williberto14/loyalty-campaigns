@@ -6,8 +6,9 @@ import (
 
 type Merchant struct {
 	gorm.Model
-	Name             string
-	ConversionFactor float64
-	Branches         []Branch
-	Campaigns        []Campaign
+	Name              string
+	ConversionFactor  float64
+	DefaultRewardType string
+	Branches          []Branch
+	Campaigns         []Campaign
 }

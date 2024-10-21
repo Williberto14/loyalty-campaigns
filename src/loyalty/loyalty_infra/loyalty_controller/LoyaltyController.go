@@ -6,6 +6,8 @@ import (
 	"loyalty-campaigns/src/common/configs"
 	"loyalty-campaigns/src/loyalty/loyalty_app"
 	"loyalty-campaigns/src/loyalty/loyalty_domain/loyalty_structs/loyalty_requests"
+	"loyalty-campaigns/src/merchant/merchant_app"
+	"loyalty-campaigns/src/merchant/merchant_infra/merchant_repository"
 	"loyalty-campaigns/src/reward/reward_app"
 	"loyalty-campaigns/src/reward/reward_infra/reward_repository"
 	"loyalty-campaigns/src/transaction/transaction_app"
@@ -34,15 +36,18 @@ func NewLoyaltyController(router *gin.Engine) *LoyaltyController {
 		transactionRepository := transaction_repository.NewGormTransactionRepository(db)
 		campaignRepository := campaign_repository.NewGormCampaignRepository(db)
 		rewardRepository := reward_repository.NewGormRewardRepository(db)
+		merchantRepository := merchant_repository.NewGormMerchantRepository(db)
 
 		transactionService := transaction_app.NewTransactionService(transactionRepository)
 		campaignService := campaign_app.NewCampaignService(campaignRepository)
 		rewardService := reward_app.NewRewardService(rewardRepository)
+		merchantService := merchant_app.NewMerchantService(merchantRepository)
 
 		loyaltyControllerInstance.loyaltyService = loyalty_app.NewLoyaltyService(
 			transactionService,
 			campaignService,
 			rewardService,
+			merchantService,
 		)
 
 		loyaltyControllerInstance.setupRoutes(router)
@@ -59,6 +64,7 @@ func (c *LoyaltyController) setupRoutes(router *gin.Engine) {
 }
 
 // ProcessTransaction godoc
+//
 //	@Summary		Process a transaction and award loyalty points or cashback
 //	@Description	Process a user transaction and award loyalty points or cashback based on active campaigns
 //	@Tags			loyalty
@@ -86,6 +92,7 @@ func (c *LoyaltyController) ProcessTransaction(ctx *gin.Context) {
 }
 
 // RedeemRewards godoc
+//
 //	@Summary		Redeem user rewards
 //	@Description	Redeem a user's loyalty points or cashback
 //	@Tags			loyalty

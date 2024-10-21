@@ -46,6 +46,7 @@ func (c *CampaignController) setupCampaignRoutes(router *gin.Engine) {
 }
 
 // CreateCampaign godoc
+//
 //	@Summary		Create a new campaign
 //	@Description	Create a new loyalty campaign in the system
 //	@Tags			campaigns
@@ -73,6 +74,7 @@ func (c *CampaignController) CreateCampaign(ctx *gin.Context) {
 }
 
 // GetCampaign godoc
+//
 //	@Summary		Get a campaign by ID
 //	@Description	Get details of a specific campaign
 //	@Tags			campaigns
@@ -100,6 +102,7 @@ func (c *CampaignController) GetCampaign(ctx *gin.Context) {
 }
 
 // UpdateCampaign godoc
+//
 //	@Summary		Update a campaign
 //	@Description	Update details of an existing campaign
 //	@Tags			campaigns
@@ -134,6 +137,7 @@ func (c *CampaignController) UpdateCampaign(ctx *gin.Context) {
 }
 
 // DeleteCampaign godoc
+//
 //	@Summary		Delete a campaign
 //	@Description	Delete an existing campaign from the system
 //	@Tags			campaigns
@@ -161,6 +165,7 @@ func (c *CampaignController) DeleteCampaign(ctx *gin.Context) {
 }
 
 // ListCampaigns godoc
+//
 //	@Summary		List all campaigns
 //	@Description	Get a list of all campaigns in the system
 //	@Tags			campaigns
@@ -180,6 +185,7 @@ func (c *CampaignController) ListCampaigns(ctx *gin.Context) {
 }
 
 // GetActiveCampaigns godoc
+//
 //	@Summary		Get active campaigns
 //	@Description	Get a list of active campaigns for a specific merchant, branch, and date
 //	@Tags			campaigns
@@ -196,7 +202,9 @@ func (c *CampaignController) GetActiveCampaigns(ctx *gin.Context) {
 	branchID, _ := strconv.ParseUint(ctx.Query("branchId"), 10, 32)
 	date, _ := time.Parse(time.RFC3339, ctx.Query("date"))
 
-	responses, err := c.campaignService.GetActiveCampaigns(uint(merchantID), uint(branchID), date)
+	branchIDUint := uint(branchID)
+
+	responses, err := c.campaignService.GetActiveCampaigns(uint(merchantID), &branchIDUint, date)
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return

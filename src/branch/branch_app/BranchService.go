@@ -155,10 +155,10 @@ func (s *branchService) GetBranchWithCampaigns(id uint) (*branch_responses.Branc
 		campaignResponses[i] = branch_responses.CampaignResponse{
 			ID:        campaign.ID,
 			StartDate: campaign.StartDate,
-			EndDate:   campaign.EndDate,
+			EndDate:   *campaign.EndDate,
 			Type:      campaign.Type,
 			Value:     campaign.Value,
-			MinAmount: campaign.MinAmount,
+			MinAmount: *campaign.MinAmount,
 		}
 	}
 

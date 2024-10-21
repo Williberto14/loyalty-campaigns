@@ -43,9 +43,17 @@ func (r *GormCampaignRepository) List() ([]models.Campaign, error) {
 	return campaigns, err
 }
 
-func (r *GormCampaignRepository) GetActiveCampaigns(merchantID, branchID uint, date time.Time) ([]models.Campaign, error) {
+func (r *GormCampaignRepository) GetActiveCampaigns(merchantID uint, branchID *uint, date time.Time) ([]models.Campaign, error) {
 	var campaigns []models.Campaign
-	err := r.DB.Where("merchant_id = ? AND branch_id = ? AND start_date <= ? AND end_date >= ?",
-		merchantID, branchID, date, date).Find(&campaigns).Error
+	query := r.DB.Where("merchant_id = ? AND start_date <= ?", merchantID, date).
+		Where("end_date IS NULL OR end_date >= ?", date)
+
+	if branchID != nil {
+		query = query.Where("branch_id IS NULL OR branch_id = ?", *branchID)
+	} else {
+		query = query.Where("branch_id IS NULL")
+	}
+
+	err := query.Find(&campaigns).Error
 	return campaigns, err
 }
