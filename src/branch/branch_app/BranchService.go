@@ -5,6 +5,7 @@ import (
 	"loyalty-campaigns/src/branch/branch_domain/branch_structs/branch_requests"
 	"loyalty-campaigns/src/branch/branch_domain/branch_structs/branch_responses"
 	"loyalty-campaigns/src/common/models"
+	"loyalty-campaigns/src/common/utils"
 	"sync"
 )
 
@@ -20,6 +21,7 @@ type IBranchService interface {
 
 type branchService struct {
 	branchRepo branch_ports.IBranchRepository
+	logger     utils.ILogger
 }
 
 var (
@@ -31,6 +33,7 @@ func NewBranchService(branchRepo branch_ports.IBranchRepository) IBranchService 
 	branchServiceOnce.Do(func() {
 		branchServiceInstance = &branchService{
 			branchRepo: branchRepo,
+			logger:     utils.NewLogger(),
 		}
 	})
 	return branchServiceInstance
@@ -44,6 +47,7 @@ func (s *branchService) CreateBranch(req branch_requests.CreateBranchRequest) (*
 
 	err := s.branchRepo.Create(branch)
 	if err != nil {
+		s.logger.Error("Error al crear sucursal", err)
 		return nil, err
 	}
 
@@ -57,6 +61,7 @@ func (s *branchService) CreateBranch(req branch_requests.CreateBranchRequest) (*
 func (s *branchService) GetBranch(id uint) (*branch_responses.BranchResponse, error) {
 	branch, err := s.branchRepo.GetByID(id)
 	if err != nil {
+		s.logger.Error("Error al obtener sucursal", err)
 		return nil, err
 	}
 
@@ -70,6 +75,7 @@ func (s *branchService) GetBranch(id uint) (*branch_responses.BranchResponse, er
 func (s *branchService) UpdateBranch(id uint, req branch_requests.UpdateBranchRequest) (*branch_responses.BranchResponse, error) {
 	branch, err := s.branchRepo.GetByID(id)
 	if err != nil {
+		s.logger.Error("Error al obtener sucursal para actualizar", err)
 		return nil, err
 	}
 
@@ -80,6 +86,7 @@ func (s *branchService) UpdateBranch(id uint, req branch_requests.UpdateBranchRe
 
 	err = s.branchRepo.Update(branch)
 	if err != nil {
+		s.logger.Error("Error al actualizar sucursal", err)
 		return nil, err
 	}
 
@@ -91,12 +98,17 @@ func (s *branchService) UpdateBranch(id uint, req branch_requests.UpdateBranchRe
 }
 
 func (s *branchService) DeleteBranch(id uint) error {
-	return s.branchRepo.Delete(id)
+	err := s.branchRepo.Delete(id)
+	if err != nil {
+		s.logger.Error("Error al eliminar sucursal", err)
+	}
+	return err
 }
 
 func (s *branchService) ListBranches() ([]branch_responses.BranchResponse, error) {
 	branches, err := s.branchRepo.List()
 	if err != nil {
+		s.logger.Error("Error al listar sucursales", err)
 		return nil, err
 	}
 
@@ -115,6 +127,7 @@ func (s *branchService) ListBranches() ([]branch_responses.BranchResponse, error
 func (s *branchService) GetBranchesByMerchant(merchantID uint) ([]branch_responses.BranchResponse, error) {
 	branches, err := s.branchRepo.GetByMerchantID(merchantID)
 	if err != nil {
+		s.logger.Error("Error al obtener sucursales por comerciante", err)
 		return nil, err
 	}
 
@@ -133,6 +146,7 @@ func (s *branchService) GetBranchesByMerchant(merchantID uint) ([]branch_respons
 func (s *branchService) GetBranchWithCampaigns(id uint) (*branch_responses.BranchWithCampaignsResponse, error) {
 	branch, err := s.branchRepo.GetBranchWithCampaigns(id)
 	if err != nil {
+		s.logger.Error("Error al obtener sucursal con campañas", err)
 		return nil, err
 	}
 
