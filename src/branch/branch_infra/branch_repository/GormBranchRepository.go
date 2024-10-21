@@ -11,7 +11,7 @@ type GormBranchRepository struct {
 	DB *gorm.DB
 }
 
-func NewGormBranchRepository(db *gorm.DB) branch_ports.BranchRepository {
+func NewGormBranchRepository(db *gorm.DB) branch_ports.IBranchRepository {
 	return &GormBranchRepository{DB: db}
 }
 
@@ -46,4 +46,13 @@ func (r *GormBranchRepository) GetByMerchantID(merchantID uint) ([]models.Branch
 	var branches []models.Branch
 	err := r.DB.Where("merchant_id = ?", merchantID).Find(&branches).Error
 	return branches, err
+}
+
+func (r *GormBranchRepository) GetBranchWithCampaigns(id uint) (*models.Branch, error) {
+	var branch models.Branch
+	err := r.DB.Preload("Campaigns").First(&branch, id).Error
+	if err != nil {
+		return nil, err
+	}
+	return &branch, nil
 }
