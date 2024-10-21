@@ -38,12 +38,13 @@ func (c *TransactionController) setupTransactionRoutes(router *gin.Engine) {
 	{
 		transactionGroup.POST("", c.CreateTransaction)
 		transactionGroup.GET("/:id", c.GetTransaction)
-		transactionGroup.GET("/users/:userID", c.ListTransactionsByUser)
-		transactionGroup.GET("/users/:userID/total-amount", c.GetTotalAmountByUserAndDateRange)
+		transactionGroup.GET("/user/:userID", c.ListTransactionsByUser)
+		transactionGroup.GET("/user/:userID/total-amount", c.GetTotalAmountByUserAndDateRange)
 	}
 }
 
 // CreateTransaction godoc
+//
 //	@Summary		Create a new transaction
 //	@Description	Create a new transaction in the system
 //	@Tags			transactions
@@ -71,6 +72,7 @@ func (c *TransactionController) CreateTransaction(ctx *gin.Context) {
 }
 
 // GetTransaction godoc
+//
 //	@Summary		Get a transaction by ID
 //	@Description	Get details of a specific transaction
 //	@Tags			transactions
@@ -98,6 +100,7 @@ func (c *TransactionController) GetTransaction(ctx *gin.Context) {
 }
 
 // ListTransactionsByUser godoc
+//
 //	@Summary		List transactions for a specific user
 //	@Description	Get a list of all transactions for a given user
 //	@Tags			transactions
@@ -125,6 +128,7 @@ func (c *TransactionController) ListTransactionsByUser(ctx *gin.Context) {
 }
 
 // GetTotalAmountByUserAndDateRange godoc
+//
 //	@Summary		Get total transaction amount for a user within a date range
 //	@Description	Calculate the total transaction amount for a specific user within a given date range
 //	@Tags			transactions

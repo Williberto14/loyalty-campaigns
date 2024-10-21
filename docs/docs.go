@@ -1876,28 +1876,25 @@ const docTemplate = `{
         "campaign_requests.CreateCampaignRequest": {
             "type": "object",
             "required": [
-                "branch_id",
-                "end_date",
-                "merchant_id",
-                "min_amount",
-                "start_date",
+                "merchantId",
+                "startDate",
                 "type",
                 "value"
             ],
             "properties": {
-                "branch_id": {
+                "branchId": {
                     "type": "integer"
                 },
-                "end_date": {
+                "endDate": {
                     "type": "string"
                 },
-                "merchant_id": {
+                "merchantId": {
                     "type": "integer"
                 },
-                "min_amount": {
+                "minAmount": {
                     "type": "number"
                 },
-                "start_date": {
+                "startDate": {
                     "type": "string"
                 },
                 "type": {
@@ -1911,20 +1908,18 @@ const docTemplate = `{
         "campaign_requests.UpdateCampaignRequest": {
             "type": "object",
             "required": [
-                "end_date",
-                "min_amount",
-                "start_date",
+                "startDate",
                 "type",
                 "value"
             ],
             "properties": {
-                "end_date": {
+                "endDate": {
                     "type": "string"
                 },
-                "min_amount": {
+                "minAmount": {
                     "type": "number"
                 },
-                "start_date": {
+                "startDate": {
                     "type": "string"
                 },
                 "type": {
@@ -1938,22 +1933,22 @@ const docTemplate = `{
         "campaign_responses.CampaignResponse": {
             "type": "object",
             "properties": {
-                "branch_id": {
+                "branchId": {
                     "type": "integer"
                 },
-                "end_date": {
+                "endDate": {
                     "type": "string"
                 },
                 "id": {
                     "type": "integer"
                 },
-                "merchant_id": {
+                "merchantId": {
                     "type": "integer"
                 },
-                "min_amount": {
+                "minAmount": {
                     "type": "number"
                 },
-                "start_date": {
+                "startDate": {
                     "type": "string"
                 },
                 "type": {
@@ -2054,16 +2049,13 @@ const docTemplate = `{
                 "conversion_factor": {
                     "type": "number"
                 },
-                "created_at": {
+                "defaultRewardType": {
                     "type": "string"
                 },
                 "id": {
                     "type": "integer"
                 },
                 "name": {
-                    "type": "string"
-                },
-                "updated_at": {
                     "type": "string"
                 }
             }

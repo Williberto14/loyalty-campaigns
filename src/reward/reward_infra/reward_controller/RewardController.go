@@ -37,12 +37,13 @@ func (c *RewardController) setupRewardRoutes(router *gin.Engine) {
 	{
 		rewardGroup.POST("", c.CreateReward)
 		rewardGroup.GET("/:id", c.GetReward)
-		rewardGroup.GET("/users/:userID", c.ListRewardsByUser)
-		rewardGroup.GET("/users/:userID/total-amount", c.GetTotalRewardsByUser)
+		rewardGroup.GET("/user/:userID", c.ListRewardsByUser)
+		rewardGroup.GET("/user/:userID/total", c.GetTotalRewardsByUser)
 	}
 }
 
 // CreateReward godoc
+//
 //	@Summary		Create a new reward
 //	@Description	Create a new reward in the system
 //	@Tags			rewards
@@ -70,6 +71,7 @@ func (c *RewardController) CreateReward(ctx *gin.Context) {
 }
 
 // GetReward godoc
+//
 //	@Summary		Get a reward by ID
 //	@Description	Get details of a specific reward
 //	@Tags			rewards
@@ -97,6 +99,7 @@ func (c *RewardController) GetReward(ctx *gin.Context) {
 }
 
 // ListRewardsByUser godoc
+//
 //	@Summary		List rewards for a specific user
 //	@Description	Get a list of all rewards for a given user
 //	@Tags			rewards
@@ -124,6 +127,7 @@ func (c *RewardController) ListRewardsByUser(ctx *gin.Context) {
 }
 
 // GetTotalRewardsByUser godoc
+//
 //	@Summary		Get total rewards for a user
 //	@Description	Calculate the total rewards (points and cashback) for a specific user
 //	@Tags			rewards

@@ -62,61 +62,56 @@ definitions:
     type: object
   campaign_requests.CreateCampaignRequest:
     properties:
-      branch_id:
+      branchId:
         type: integer
-      end_date:
+      endDate:
         type: string
-      merchant_id:
+      merchantId:
         type: integer
-      min_amount:
+      minAmount:
         type: number
-      start_date:
+      startDate:
         type: string
       type:
         type: string
       value:
         type: number
     required:
-    - branch_id
-    - end_date
-    - merchant_id
-    - min_amount
-    - start_date
+    - merchantId
+    - startDate
     - type
     - value
     type: object
   campaign_requests.UpdateCampaignRequest:
     properties:
-      end_date:
+      endDate:
         type: string
-      min_amount:
+      minAmount:
         type: number
-      start_date:
+      startDate:
         type: string
       type:
         type: string
       value:
         type: number
     required:
-    - end_date
-    - min_amount
-    - start_date
+    - startDate
     - type
     - value
     type: object
   campaign_responses.CampaignResponse:
     properties:
-      branch_id:
+      branchId:
         type: integer
-      end_date:
+      endDate:
         type: string
       id:
         type: integer
-      merchant_id:
+      merchantId:
         type: integer
-      min_amount:
+      minAmount:
         type: number
-      start_date:
+      startDate:
         type: string
       type:
         type: string
@@ -185,13 +180,11 @@ definitions:
     properties:
       conversion_factor:
         type: number
-      created_at:
+      defaultRewardType:
         type: string
       id:
         type: integer
       name:
-        type: string
-      updated_at:
         type: string
     type: object
   reward_requests.CreateRewardRequest:
