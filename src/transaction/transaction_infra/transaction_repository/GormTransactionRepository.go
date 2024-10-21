@@ -12,7 +12,7 @@ type GormTransactionRepository struct {
 	DB *gorm.DB
 }
 
-func NewGormTransactionRepository(db *gorm.DB) transaction_ports.TransactionRepository {
+func NewGormTransactionRepository(db *gorm.DB) transaction_ports.ITransactionRepository {
 	return &GormTransactionRepository{DB: db}
 }
 
@@ -67,11 +67,14 @@ func (r *GormTransactionRepository) GetByUserAndDateRange(userID uint, startDate
 	return transactions, err
 }
 
-func (r *GormTransactionRepository) SumAmountByUserAndDateRange(userID uint, startDate, endDate time.Time) (float64, error) {
+func (r *GormTransactionRepository) GetTotalAmountByUserAndDateRange(userID uint, startDate, endDate time.Time) (float64, error) {
 	var totalAmount float64
 	err := r.DB.Model(&models.Transaction{}).
-		Select("SUM(amount)").
+		Select("SUM(amount) as total_amount").
 		Where("user_id = ? AND date BETWEEN ? AND ?", userID, startDate, endDate).
 		Scan(&totalAmount).Error
-	return totalAmount, err
+	if err != nil {
+		return 0, err
+	}
+	return totalAmount, nil
 }

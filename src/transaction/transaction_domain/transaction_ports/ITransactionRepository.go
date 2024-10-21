@@ -5,7 +5,7 @@ import (
 	"time"
 )
 
-type TransactionRepository interface {
+type ITransactionRepository interface {
 	Create(transaction *models.Transaction) error
 	GetByID(id uint) (*models.Transaction, error)
 	Update(transaction *models.Transaction) error
@@ -15,5 +15,5 @@ type TransactionRepository interface {
 	GetByBranchID(branchID uint) ([]models.Transaction, error)
 	GetByDateRange(startDate, endDate time.Time) ([]models.Transaction, error)
 	GetByUserAndDateRange(userID uint, startDate, endDate time.Time) ([]models.Transaction, error)
-	SumAmountByUserAndDateRange(userID uint, startDate, endDate time.Time) (float64, error)
+	GetTotalAmountByUserAndDateRange(userID uint, startDate, endDate time.Time) (float64, error)
 }
