@@ -1,6 +1,7 @@
 package reward_app
 
 import (
+	"errors"
 	"loyalty-campaigns/src/common/models"
 	"loyalty-campaigns/src/common/utils"
 	"loyalty-campaigns/src/reward/reward_domain/reward_ports"
@@ -14,6 +15,7 @@ type IRewardService interface {
 	GetReward(id uint) (*reward_responses.RewardResponse, error)
 	ListRewardsByUser(userID uint) ([]reward_responses.RewardResponse, error)
 	GetTotalRewardsByUser(userID uint) (*reward_responses.TotalRewardsResponse, error)
+	DeductRewards(userID, merchantID uint, amount float64, rewardType string) error
 }
 
 type rewardService struct {
@@ -103,4 +105,58 @@ func mapRewardsToResponses(rewards []models.Reward) []reward_responses.RewardRes
 		responses[i] = *mapRewardToResponse(&reward)
 	}
 	return responses
+}
+
+func (s *rewardService) DeductRewards(userID, merchantID uint, amount float64, rewardType string) error {
+	// 1. Get user's rewards for the specific merchant and type
+	rewards, err := s.rewardRepo.GetByUserMerchantAndType(userID, merchantID, rewardType)
+	if err != nil {
+		s.logger.Error("Error al obtener recompensas del usuario", err)
+		return err
+	}
+
+	// 2. Calculate total available rewards
+	var totalAvailable float64
+	for _, reward := range rewards {
+		totalAvailable += reward.Amount
+	}
+
+	// 3. Check if user has enough rewards
+	if totalAvailable < amount {
+		return errors.New("insufficient rewards")
+	}
+
+	// 4. Deduct rewards
+	remaining := amount
+	for _, reward := range rewards {
+		if remaining <= 0 {
+			break
+		}
+
+		if reward.Amount <= remaining {
+			// Use up this reward completely
+			err = s.rewardRepo.Delete(reward.ID)
+			if err != nil {
+				s.logger.Error("Error al eliminar recompensa", err)
+				return err
+			}
+			remaining -= reward.Amount
+		} else {
+			// Partially use this reward
+			reward.Amount -= remaining
+			err = s.rewardRepo.Update(&reward)
+			if err != nil {
+				s.logger.Error("Error al actualizar recompensa", err)
+				return err
+			}
+			remaining = 0
+		}
+	}
+
+	if remaining > 0 {
+		s.logger.Error("Error inesperado al deducir recompensas", errors.New("remaining rewards after deduction"))
+		return errors.New("unexpected error while deducting rewards")
+	}
+
+	return nil
 }

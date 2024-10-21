@@ -19,4 +19,5 @@ type IRewardRepository interface {
 	GetActiveRewards(userID uint, currentDate time.Time) ([]models.Reward, error)
 	MarkAsRedeemed(rewardID uint) error
 	GetExpiredRewards(currentDate time.Time) ([]models.Reward, error)
+	GetByUserMerchantAndType(userID, merchantID uint, rewardType string) ([]models.Reward, error)
 }

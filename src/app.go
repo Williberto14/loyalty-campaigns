@@ -2,9 +2,15 @@ package src
 
 import (
 	"log"
+	"loyalty-campaigns/src/branch/branch_infra/branch_controller"
+	"loyalty-campaigns/src/campaign/campaign_infra/campaign_controller"
 	"loyalty-campaigns/src/common/configs"
 	"loyalty-campaigns/src/common/utils"
+	"loyalty-campaigns/src/loyalty/loyalty_infra/loyalty_controller"
 	"loyalty-campaigns/src/merchant/merchant_infra/merchant_controller"
+	"loyalty-campaigns/src/reward/reward_infra/reward_controller"
+	"loyalty-campaigns/src/transaction/transaction_infra/transaction_controller"
+	"loyalty-campaigns/src/user/user_infra/user_controller"
 
 	"github.com/gin-gonic/gin"
 )
@@ -24,7 +30,14 @@ func Run() {
 	gin.SetMode("debug")
 	router := gin.Default()
 
+	// Register controllers
+	user_controller.NewUserController(router)
 	merchant_controller.NewMerchantController(router)
+	branch_controller.NewBranchController(router)
+	campaign_controller.NewCampaignController(router)
+	reward_controller.NewRewardController(router)
+	transaction_controller.NewTransactionController(router)
+	loyalty_controller.NewLoyaltyController(router)
 
 	router.Run("127.0.0.1:7070")
 

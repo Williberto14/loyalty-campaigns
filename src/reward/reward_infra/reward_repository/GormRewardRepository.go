@@ -109,3 +109,9 @@ func (r *GormRewardRepository) GetTotalRewardsByUser(userID uint) (totalPoints f
 
 	return pointsSum.Total, cashbackSum.Total, nil
 }
+
+func (r *GormRewardRepository) GetByUserMerchantAndType(userID, merchantID uint, rewardType string) ([]models.Reward, error) {
+	var rewards []models.Reward
+	err := r.DB.Where("user_id = ? AND merchant_id = ? AND type = ?", userID, merchantID, rewardType).Find(&rewards).Error
+	return rewards, err
+}
