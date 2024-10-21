@@ -11,8 +11,11 @@ import (
 	"loyalty-campaigns/src/reward/reward_infra/reward_controller"
 	"loyalty-campaigns/src/transaction/transaction_infra/transaction_controller"
 	"loyalty-campaigns/src/user/user_infra/user_controller"
+	"time"
 
 	_ "loyalty-campaigns/docs"
+
+	"github.com/gin-contrib/cors"
 
 	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
@@ -34,6 +37,7 @@ func Run() {
 
 	gin.SetMode("debug")
 	router := gin.Default()
+	addCORSConfig(router)
 
 	// Register controllers
 	user_controller.NewUserController(router)
@@ -48,4 +52,16 @@ func Run() {
 
 	router.Run("127.0.0.1:7070")
 
+}
+
+func addCORSConfig(serverInstance *gin.Engine) {
+	corsMiddleware := cors.New(cors.Config{
+		AllowAllOrigins:  true,
+		AllowMethods:     []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
+		AllowHeaders:     []string{"Origin", "Content-Type", "Authorization"},
+		ExposeHeaders:    []string{"Content-Length"},
+		AllowCredentials: true,
+		MaxAge:           12 * time.Hour,
+	})
+	serverInstance.Use(corsMiddleware)
 }

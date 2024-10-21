@@ -2282,7 +2282,7 @@ const docTemplate = `{
 var SwaggerInfo = &swag.Spec{
 	Version:          "1.0",
 	Host:             "localhost:7070",
-	BasePath:         "/api",
+	BasePath:         "/",
 	Schemes:          []string{},
 	Title:            "Loyalty Campaigns API",
 	Description:      "This is a sample server for a loyalty campaigns application.",

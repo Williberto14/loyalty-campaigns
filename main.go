@@ -6,7 +6,7 @@ import app "loyalty-campaigns/src"
 //	@version		1.0
 //	@description	This is a sample server for a loyalty campaigns application.
 //	@host			localhost:7070
-//	@BasePath		/api
+//	@BasePath		/
 
 func main() {
 	app.Run()
