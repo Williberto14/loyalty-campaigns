@@ -5,13 +5,14 @@ import (
 	"time"
 )
 
-type RewardRepository interface {
+type IRewardRepository interface {
 	Create(reward *models.Reward) error
 	GetByID(id uint) (*models.Reward, error)
 	Update(reward *models.Reward) error
 	Delete(id uint) error
 	List() ([]models.Reward, error)
 	GetByUserID(userID uint) ([]models.Reward, error)
+	GetTotalRewardsByUser(userID uint) (totalPoints float64, totalCashback float64, err error)
 	GetByMerchantID(merchantID uint) ([]models.Reward, error)
 	GetByUserAndMerchant(userID, merchantID uint) ([]models.Reward, error)
 	SumRewardsByUser(userID uint, rewardType string) (float64, error)

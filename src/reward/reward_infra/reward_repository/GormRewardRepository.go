@@ -12,7 +12,7 @@ type GormRewardRepository struct {
 	DB *gorm.DB
 }
 
-func NewGormRewardRepository(db *gorm.DB) reward_ports.RewardRepository {
+func NewGormRewardRepository(db *gorm.DB) reward_ports.IRewardRepository {
 	return &GormRewardRepository{DB: db}
 }
 
@@ -84,4 +84,28 @@ func (r *GormRewardRepository) GetExpiredRewards(currentDate time.Time) ([]model
 	var rewards []models.Reward
 	err := r.DB.Where("expiry_date <= ? AND is_redeemed = false", currentDate).Find(&rewards).Error
 	return rewards, err
+}
+
+func (r *GormRewardRepository) GetTotalRewardsByUser(userID uint) (totalPoints float64, totalCashback float64, err error) {
+	var pointsSum, cashbackSum struct {
+		Total float64
+	}
+
+	err = r.DB.Model(&models.Reward{}).
+		Select("SUM(amount) as total").
+		Where("user_id = ? AND type = ?", userID, "points").
+		Scan(&pointsSum).Error
+	if err != nil {
+		return 0, 0, err
+	}
+
+	err = r.DB.Model(&models.Reward{}).
+		Select("SUM(amount) as total").
+		Where("user_id = ? AND type = ?", userID, "cashback").
+		Scan(&cashbackSum).Error
+	if err != nil {
+		return 0, 0, err
+	}
+
+	return pointsSum.Total, cashbackSum.Total, nil
 }
