@@ -12,7 +12,7 @@ type GormCampaignRepository struct {
 	DB *gorm.DB
 }
 
-func NewGormCampaignRepository(db *gorm.DB) campaign_ports.CampaignRepository {
+func NewGormCampaignRepository(db *gorm.DB) campaign_ports.ICampaignRepository {
 	return &GormCampaignRepository{DB: db}
 }
 

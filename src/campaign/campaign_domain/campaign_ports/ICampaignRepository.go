@@ -5,7 +5,7 @@ import (
 	"time"
 )
 
-type CampaignRepository interface {
+type ICampaignRepository interface {
 	Create(campaign *models.Campaign) error
 	GetByID(id uint) (*models.Campaign, error)
 	Update(campaign *models.Campaign) error
