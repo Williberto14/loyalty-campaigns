@@ -35,11 +35,10 @@ func (s *MerchantService) CreateMerchant(req merchant_requests.CreateMerchantReq
 	}
 
 	return &merchant_responses.MerchantResponse{
-		ID:               merchant.ID,
-		Name:             merchant.Name,
-		ConversionFactor: merchant.ConversionFactor,
-		CreatedAt:        merchant.CreatedAt,
-		UpdatedAt:        merchant.UpdatedAt,
+		ID:                merchant.ID,
+		Name:              merchant.Name,
+		ConversionFactor:  merchant.ConversionFactor,
+		DefaultRewardType: merchant.DefaultRewardType,
 	}, nil
 }
 
@@ -52,11 +51,10 @@ func (s *MerchantService) ListMerchants() ([]*merchant_responses.MerchantRespons
 	var response []*merchant_responses.MerchantResponse
 	for _, merchant := range merchants {
 		response = append(response, &merchant_responses.MerchantResponse{
-			ID:               merchant.ID,
-			Name:             merchant.Name,
-			ConversionFactor: merchant.ConversionFactor,
-			CreatedAt:        merchant.CreatedAt,
-			UpdatedAt:        merchant.UpdatedAt,
+			ID:                merchant.ID,
+			Name:              merchant.Name,
+			ConversionFactor:  merchant.ConversionFactor,
+			DefaultRewardType: merchant.DefaultRewardType,
 		})
 	}
 
@@ -70,11 +68,10 @@ func (s *MerchantService) GetMerchant(id uint) (*merchant_responses.MerchantResp
 	}
 
 	return &merchant_responses.MerchantResponse{
-		ID:               merchant.ID,
-		Name:             merchant.Name,
-		ConversionFactor: merchant.ConversionFactor,
-		CreatedAt:        merchant.CreatedAt,
-		UpdatedAt:        merchant.UpdatedAt,
+		ID:                merchant.ID,
+		Name:              merchant.Name,
+		ConversionFactor:  merchant.ConversionFactor,
+		DefaultRewardType: merchant.DefaultRewardType,
 	}, nil
 }
 
@@ -93,11 +90,10 @@ func (s *MerchantService) UpdateMerchant(id uint, req merchant_requests.UpdateMe
 	}
 
 	return &merchant_responses.MerchantResponse{
-		ID:               merchant.ID,
-		Name:             merchant.Name,
-		ConversionFactor: merchant.ConversionFactor,
-		CreatedAt:        merchant.CreatedAt,
-		UpdatedAt:        merchant.UpdatedAt,
+		ID:                merchant.ID,
+		Name:              merchant.Name,
+		ConversionFactor:  merchant.ConversionFactor,
+		DefaultRewardType: merchant.DefaultRewardType,
 	}, nil
 }
 

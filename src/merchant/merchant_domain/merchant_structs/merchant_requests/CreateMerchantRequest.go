@@ -1,6 +1,7 @@
 package merchant_requests
 
 type CreateMerchantRequest struct {
-	Name             string  `json:"name" binding:"required"`
-	ConversionFactor float64 `json:"conversion_factor" binding:"required"`
+	Name              string  `json:"name" binding:"required"`
+	ConversionFactor  float64 `json:"conversion_factor" binding:"required"`
+	DefaultRewardType string  `json:"defaultRewardType" binding:"required,oneof=points cashback"`
 }
